@@ -32,10 +32,13 @@ onready var explosion = load("res://explosion/explosion.tscn")
 
 const max_steering_accel = 5.0
 
+var team = 0
+
 func turn_to(desired_facing:Vector2) -> void:
 #	var facing = Vector2(cos(deg2rad(sprite.rotation_degrees)), sin(deg2rad(sprite.rotation_degrees)))
 #	sprite.rotation_degrees = rad2deg(facing.slerp(desired_facing, 0.8).angle() + PI / 4)
-	sprite.rotation_degrees = rad2deg((desired_facing).angle() + PI / 2)
+	sprite.rotation_degrees = rad2deg(lerp_angle(deg2rad(sprite.rotation_degrees), desired_facing.angle() + PI / 2, 0.49))
+#	sprite.rotation_degrees = rad2deg((desired_facing).angle() + PI / 2)
 
 func _process(delta:float):
 	mouse_pos = get_global_mouse_position()
@@ -75,15 +78,16 @@ func deload() -> void:
 	reloaded = false
 	reload_timer.start()
 
-func fire_laser():
+func fire_laser(direction: Vector2, color: Color):
 	if reloaded:
 		deload()
 		var instance = projectile.instance()
 		instance.position = firepoints[firepoint].global_position
 		firepoint = (firepoint + 1) % firepoints.size()
-		instance.direction = mouse_dir
-		instance.friend = self
+		instance.direction = direction
+		instance.team = team
 		instance.calculate_rotation()
+		instance.get_node("Polygon2D").modulate = color
 		get_tree().current_scene.add_child(instance)
 
 func damage(damage:int) -> void:
@@ -104,7 +108,7 @@ func explode() -> void:
 func steer(target, desired_speed):
 	var desired_velocity = (target - position).normalized() * desired_speed
 	var steer = (desired_velocity - velocity).clamped(max_steering_accel)
-	acceleration = steer
+	acceleration = acceleration.linear_interpolate(steer, 0.3)
 
 func thrust(target, force):
 	target = target.normalized()

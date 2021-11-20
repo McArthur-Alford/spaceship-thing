@@ -61,18 +61,6 @@ position = Vector2( 243, 71.75 )
 [node name="Fighter4" parent="." instance=ExtResource( 2 )]
 position = Vector2( 181.75, 84.25 )
 
-[node name="Fighter5" parent="." instance=ExtResource( 2 )]
-position = Vector2( 217, 112.75 )
-
-[node name="Fighter6" parent="." instance=ExtResource( 2 )]
-position = Vector2( 138.512, 203.13 )
-
-[node name="Fighter7" parent="." instance=ExtResource( 2 )]
-position = Vector2( 295.49, 198.887 )
-
-[node name="Fighter8" parent="." instance=ExtResource( 2 )]
-position = Vector2( 260.842, -15.7198 )
-
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
 scroll_ignore_camera_zoom = true
 
